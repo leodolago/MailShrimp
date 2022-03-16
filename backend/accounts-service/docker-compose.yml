@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  db_account_service:
+    image: mysql
+    container_name: db_account_service
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_USER=leo
+      - MYSQL_PASSWORD=123456
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=mailshrimp
+    volumes:
+      - mysqldata:/data/mysql
+
+volumes:
+  mysqldata:
+    driver: local

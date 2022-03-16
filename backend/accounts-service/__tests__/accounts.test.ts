@@ -1,17 +1,14 @@
-import supertest from 'supertest';
-import app from '../src/app';
-
-import { describe, it, expect } from '@jest/globals';
+import request from 'supertest';
+import app from './../src/app';
 
 describe('Testando rotas do accounts', () => {
     it('GET /accounts/ - Deve retornar statusCode 200', async () => {
-        const result = await supertest(app)
-        .get('/accounts/');
+        const resultado = await request(app).get('/accounts/');
 
-        expect(result.status).toEqual(200);
-        expect(Array.isArray(result.body)).toBeTruthy();
+        expect(resultado.status).toEqual(200);
+        expect(Array.isArray(resultado.body)).toBeTruthy();
     })
-
+    
     it('POST /accounts/ - Deve retornar statusCode 201', async () => {
         const payload = {
             id: 1,
@@ -20,91 +17,89 @@ describe('Testando rotas do accounts', () => {
             password: '123456',
         }
 
-        const result = await supertest(app)
-        .post('/account/')
+        const resultado = await request(app)
+        .post('/accounts/')
         .send(payload);
 
-        expect(result.status).toEqual(201);
-        expect(result.body.id).toBe(1);
-    });  
+        expect(resultado.status).toEqual(201);
+        expect(resultado.body.id).toBe(1);
+    })
 
-    it('POST /accounts/ - Deve retornar statusCode 422', async () => {
+    it('POST /accounts/ - Deve retornar statusCode 400', async () => {
         const payload = {
             id: 1,
-            street: 'Rua dos tupis',
+            street: 'Rua dos Tupis',
             city: 'Gravatai',
-            state: 'RS'
+            status:'RS'
         }
 
-        const result = await supertest(app)
-        .post('/account/')
+        const resultado = await request(app)
+        .post('/accounts/')
         .send(payload);
 
-        expect(result.status).toEqual(422);
-    }); 
+        expect(resultado.status).toEqual(422);
+    })
 
-    it('PATCH /account/:id - Deve retornar statusCode 200', async () => {
+    it('PATCH /accounts/:id - Deve retornar statusCode 200', async () => {
         const payload = {
             name: 'Daniel Castro',
             email: 'danielcastro.rs@gmail.com',
             password: '123456789',
         }
 
-        const result = await supertest(app)
-        .patch('/account/1')
+        const resultado = await request(app)
+        .patch('/accounts/1')
         .send(payload);
 
-        expect(result.status).toEqual(200);
-        expect(result.body.id).toEqual(1);
-    });  
+        expect(resultado.status).toEqual(200);
+        expect(resultado.body.id).toEqual(1);
+    })
 
-    it('PATCH /account/:id - Deve retornar statusCode 400', async () => {
+    it('PATCH /accounts/:id - Deve retornar statusCode 400', async () => {
         const payload = {
             name: 'Daniel Castro',
             email: 'danielcastro.rs@gmail.com',
-            password: '123456789'
+            password: '123456789',
         }
 
-        const result = await supertest(app)
-        .patch('/account/abc')
+        const resultado = await request(app)
+        .patch('/accounts/abc')
         .send(payload);
 
-        expect(result.status).toEqual(400);
-    });  
+        expect(resultado.status).toEqual(400);
+    })
 
-    it('PATCH /account/:id - Deve retornar statusCode 404', async () => {
+
+it('PATCH /accounts/:id - Deve retornar statusCode 404', async () => {
         const payload = {
             name: 'Daniel Castro',
             email: 'danielcastro.rs@gmail.com',
-            password: '123456789'
+            password: '123456789',
         }
 
-        const result = await supertest(app)
-        .patch('/account/-1')
+        const resultado = await request(app)
+        .patch('/accounts/-1')
         .send(payload);
 
-        expect(result.status).toEqual(404);
-    });
-
-    it('GET /account/:id - Deve retornar statusCode 200', async () => {
-        const result = await supertest(app)
-        .get('/account/1');
-
-        expect(result.status).toEqual(200);
-        expect(result.body.id).toBe(1);
+        expect(resultado.status).toEqual(404);
     })
 
-    it('GET /account/:id - Deve retornar statusCode 404', async () => {
-        const result = await supertest(app)
-        .get('/account/2');
+    it('GET /accounts/:id - Deve retornar statusCode 200', async () => {
+        const resultado = await request(app).get('/accounts/1');
 
-        expect(result.status).toEqual(404);
+        expect(resultado.status).toEqual(200);
+        expect(resultado.body.id).toBe(1);
     })
 
-    it('GET /account/:id - Deve retornar statusCode 400', async () => {
-        const result = await supertest(app)
-        .get('/account/abc');
+    it('GET /accounts/:id - Deve retornar statusCode 404', async () => {
+        const resultado = await request(app).get('/accounts/2');
 
-        expect(result.status).toEqual(400);
+        expect(resultado.status).toEqual(404);
+    })
+
+    it('GET /accounts/:id - Deve retornar statusCode 400', async () => {
+        const resultado = await request(app).get('/accounts/abc');
+
+        expect(resultado.status).toEqual(400);
     })
 })

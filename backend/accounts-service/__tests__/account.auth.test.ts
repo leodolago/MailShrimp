@@ -1,69 +1,65 @@
-import supertest from 'supertest';
+import request from 'supertest';
 import app from '../src/app';
 
-import { describe, it, expect } from '@jest/globals';
-
 describe('Testando rotas de autenticação', () => {
-    it('POST /account/login - 200 OK', async () => {
+    it('POST /accounts/login = 200 ok', async () => {
         //mocking
-        const newAccount= {
+        const newAccount = {
             id: 1,
             name: 'Daniel',
             email: 'danielcastro.rs@gmail.com',
-            password: '1234567',
+            password: '123456',
         }
 
-        await supertest(app)
-        .post('/account/')
-        .send(newAccount);
+        await request(app)
+            .post('/accounts/')
+            .send(newAccount)
 
         //testing
-        const payload = {
+        const payload ={
             email: 'danielcastro.rs@gmail.com',
-            password: '1234567',
+            password: '123456'
         }
 
-        const result = await supertest(app)
-        .post('/account/login')
+        const resultado = await request(app)
+        .post('/accounts/login')
         .send(payload);
 
-        expect(result.status).toEqual(200);
-        expect(result.body.auth).toBeTruthy();
-        expect(result.body.token).toBeTruthy();
+        expect(resultado.status).toEqual(200);
+        expect(resultado.body.auth).toBeTruthy();
+        expect(resultado.body.token).toBeTruthy();
     })
 
-    it('POST /account/login - 422 Unprocessable Entity', async () => {
-        const payload = {
+    it('POST /accounts/login = 422 Unprocssable Entity', async () => {
+        const payload ={
             email: 'danielcastro.rs@gmail.com',
-            password: 'abc1',
+            password: 'abc'
         }
 
-        const result = await supertest(app)
-        .post('/account/login')
+        const resultado = await request(app)
+        .post('/accounts/login')
         .send(payload);
 
-        expect(result.status).toEqual(422);
-    })
+        expect(resultado.status).toEqual(422);
+    })    
 
-    it('POST /account/login - 401 Unauthorized', async () => {
-        const payload = {
+    it('POST /accounts/login = 401 Unauthorized', async () => {
+        const payload ={
             email: 'danielcastro.rs@gmail.com',
-            password: 'abc123',
+            password: 'abc123'
         }
 
-        const result = await supertest(app)
-        .post('/account/login')
+        const resultado = await request(app)
+        .post('/accounts/login')
         .send(payload);
 
-        expect(result.status).toEqual(401);
-    })
+        expect(resultado.status).toEqual(401);
+    })  
+    
+    it('POST /accounts/logout = 200 ok', async () => {
+        const resultado = await request(app)
+        .post('/accounts/logout');
 
-    it('POST /account/logout - 200 OK', async () => {
-        
-        const result = await supertest(app)
-        .post('/account/logout');
-
-        expect(result.status).toEqual(200);
-    })
-
+        expect(resultado.status).toEqual(200);
+    }) 
 })

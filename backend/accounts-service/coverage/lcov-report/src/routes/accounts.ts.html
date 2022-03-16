@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/routes/account.ts</title>
+    <title>Code coverage report for src/routes/accounts.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routes</a> account.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/routes</a> accounts.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/39</span>
+                <span class='fraction'>40/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/39</span>
+                <span class='fraction'>40/40</span>
             </div>
         
             
@@ -54,6 +54,12 @@
         <p class="quiet">
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
     </div>
     <div class='status-line high'></div>
     <pre><table class="coverage">
@@ -95,25 +101,26 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -133,12 +140,13 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { Router, Request, Response } from "express";
-import Joi from "joi";
-import accountController from '../controllers/account';
-import { accountSchema, loginSchema } from "../models/account";
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import { Router, Request, Response } from 'express';
+import  accountsController  from '../controllers/accounts';
+import { accountSchema, loginSchema } from '../models/account';
+import Joi from 'joi';
 &nbsp;
-function validateSchema( schema: Joi.ObjectSchema&lt;any&gt; , req: Request, res: Response, next: any) {
+function validateSchema(schema: Joi.ObjectSchema&lt;any&gt;, req: Request, res: Response, next: any) {
     const {error} = schema.validate(req.body);
     if(error == null) return next();
 &nbsp;
@@ -153,23 +161,24 @@ function validateAccount(req: Request, res: Response, next: any) {
     return validateSchema(accountSchema, req, res, next);
 }
 &nbsp;
-function validateLogin(req: Request, res: Response, next: any) {
+function validatelogin(req: Request, res: Response, next: any) {
     return validateSchema(loginSchema, req, res, next);
 }
 &nbsp;
+&nbsp;
 const router = Router();
 &nbsp;
-router.get('/accounts', accountController.getAccounts);
+router.get('/accounts/', accountsController.getAccounts);
 &nbsp;
-router.get('/account/:id', accountController.getAccount);
+router.get('/accounts/:id', accountsController.getAccount);
 &nbsp;
-router.patch('/account/:id', accountController.setAccount);
+router.patch('/accounts/:id', validateAccount, accountsController.setAccount);
 &nbsp;
-router.post('/account', validateAccount, accountController.addAccount);
+router.post('/accounts/', validateAccount, accountsController.addAccounts);
 &nbsp;
-router.post('/account/login', validateLogin, accountController.loginAccount);
+router.post('/accounts/login', validatelogin, accountsController.loginAccount);
 &nbsp;
-router.post('/account/logout', accountController.logoutAccount);
+router.post('/accounts/logout', accountsController.logoutAccount);
 &nbsp;
 export default router;</pre></td></tr></table></pre>
 
@@ -177,10 +186,9 @@ export default router;</pre></td></tr></table></pre>
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
-                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Aug 18 2021 08:28:54 GMT-0300 (Horário Padrão de Brasília)
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at Mon Mar 14 2022 13:51:58 GMT-0300 (Horário Padrão de Brasília)
             </div>
-        </div>
         <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
