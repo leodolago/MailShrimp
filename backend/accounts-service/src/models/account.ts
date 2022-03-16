@@ -30,7 +30,7 @@ const accountSchema = Joi.object({
     status: Joi.number()
     .integer()
     .min(100)
-    .max(400)
+    .max(800)
 })
 
 const loginSchema = Joi.object({
