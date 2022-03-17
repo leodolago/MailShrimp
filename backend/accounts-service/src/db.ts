@@ -9,7 +9,7 @@ const dbPort = parseInt(process.env.DB_PORT!);
 const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     dialect: 'mysql', 
     host: dbHost,
-    port: dbPort
+    port: dbPort,
 });
 
-export default sequelize
+export default sequelize;

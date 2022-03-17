@@ -1,43 +1,32 @@
 import { Request, response, Response } from 'express';
 import { IAccount } from '../models/account';
-import repository from '../models/accountModel';
-import auth from '../auth';
 
 const accounts : IAccount[] = [];
 
-async function getAccounts(req: Request, res: Response, next: any){
-    const accounts = await repository.findAll();
-    res.json(accounts.map(item => {
-        item.password = '';
-        return item;
-    }));
+function getAccounts(req: Request, res: Response, next: any){
+    res.json(accounts);
 }
 
-async function getAccount(req: Request, res: Response, next: any){
+function getAccount(req: Request, res: Response, next: any){
     try {
         const id = parseInt(req.params.id);
         if(!id) throw new Error('ID is invalid format');
 
-        const account = await repository.findById(id);
-        if (account === null)
-            return res.status(404).end();
-        else {
-            account.password = ''
-            return res.json(account);
-        }
-    } catch (error) {
+        const index = accounts.findIndex(item => item.id === id);
+    if(index === -1)
+        return res.status(404).end();
+    else
+        return res.json(accounts[index]);
+    } catch (error){
         console.log(error);
         res.status(400).end();
     }
 }
 
-async function addAccount(req: Request, res: Response, next: any){
+function addAccounts(req: Request, res: Response, next: any){
     try {
         const newAccount = req.body as IAccount;
-        newAccount.password = auth.hashPassword(newAccount.password);
-        const result = await repository.add(newAccount);
-        newAccount.password = '';
-        newAccount.id = result.id;
+        accounts.push(newAccount);
         res.status(201).json(newAccount);
     }
     catch(error) {
@@ -46,16 +35,23 @@ async function addAccount(req: Request, res: Response, next: any){
     }
 }
 
-async function setAccount(req: Request, res: Response, next: any){
+function setAccount(req: Request, res: Response, next: any){
     try {
         const accountId = parseInt(req.params.id);
         if(!accountId) throw new Error('Id is in invalid format.');
 
+
         const accountParams = req.body as IAccount;
-        accountParams.password = auth.hashPassword(accountParams.password);
-        const updatedAccount = await repository.set(accountId, accountParams);
-        updatedAccount.password = '';
-        res.status(200).json(updatedAccount);
+        const index = accounts.findIndex(item => item.id === accountId);
+        if(index === -1) return res.status(404).end();
+
+        const originalAccount = accounts[index];
+
+        if(accountParams.name) originalAccount.name = accountParams.name;
+        if(accountParams.password) originalAccount.password = accountParams.password;
+
+        accounts[index] = originalAccount
+        res.status(200).json(originalAccount);
     }
     catch(error) {
         console.log(error);
@@ -81,4 +77,4 @@ function logoutAccount(req: Request, res: Response, next: any){
     res.json({ auth: false, token: null });
 }
     
-export default { getAccounts, addAccount, getAccount, setAccount, loginAccount, logoutAccount};
+export default { getAccounts, addAccounts, getAccount, setAccount, loginAccount, logoutAccount};

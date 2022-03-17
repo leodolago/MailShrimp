@@ -5,7 +5,7 @@ import database from './db';
     try {
         const port = parseInt(`${process.env.PORT}`);
 
-        await database.sync()
+        await database.sync({ force: true })
         console.log(`Running database ${process.env.DB_NAME} ok!`);
 
         await app.listen(port);
