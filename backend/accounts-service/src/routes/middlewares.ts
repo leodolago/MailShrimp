@@ -15,15 +15,15 @@ function validateSchema(schema: Joi.ObjectSchema<any>, req: Request, res: Respon
     res.status(422).end();
 }
 
-function validateAccount(req: Request, res: Response, next: any) {
+function validateAccountSchema(req: Request, res: Response, next: any) {
     return validateSchema(accountSchema, req, res, next);
 }
 
-function validateUpdateAccount(req: Request, res: Response, next: any) {
+function validateUpdateAccountSchema(req: Request, res: Response, next: any) {
     return validateSchema(accountUpdateSchema, req, res, next);
 }
 
-function validatelogin(req: Request, res: Response, next: any) {
+function validateloginSchema(req: Request, res: Response, next: any) {
     return validateSchema(loginSchema, req, res, next);
 }
 
@@ -45,4 +45,4 @@ async function validateAuth(req: Request, res: Response, next: any) {
     }
 }
 
-export { validateAccount, validatelogin, validateUpdateAccount, validateAuth}
+export { validateAccountSchema, validateloginSchema, validateUpdateAccountSchema, validateAuth}
