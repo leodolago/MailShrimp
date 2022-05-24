@@ -5,12 +5,11 @@ import {IAccount} from '../src/models/account';
 import repository from '../src/models/accountRepository';
 import auth from '../src/auth';
 
-const testEmail = 'jest@jest.com';
-const testEmail2 = 'jest2@jest.com';
+const testEmail = 'jest@accounts.com';
+const testEmail2 = 'jest2@accounts.com';
 const hashPassword = '$2a$10$ye/d5KSzdLt0TIOpevAtde2mgreLPUpLpnE0vyQJ0iMBVeZyklKSi';
 let jwt : string = '';
 let testId : number = 0;
-
 
 beforeAll(async () => {
     const testAccount : IAccount = {
@@ -21,17 +20,20 @@ beforeAll(async () => {
     }
     const result = await repository.add(testAccount);
     testId = result.id!;
-    jwt = await auth.sign(result.id!);
+    jwt = await auth.sign(testId);
 })
 
 afterAll(async () => {
-    await repository.removeByEmail(testEmail);
-    await repository.removeByEmail(testEmail2);
+  await repository.removeByEmail(testEmail);
+  await repository.removeByEmail(testEmail2);
 })
+
 
 describe('Testando rotas do accounts', () => {
     it('GET /accounts/ - Deve retornar statusCode 200', async () => {
-        const resultado = await request(app).get('/accounts/').set('x-access-token', jwt);
+        const resultado = await request(app)
+            .get('/accounts/')
+            .set('x-access-token', jwt);
 
         expect(resultado.status).toEqual(200);
         expect(Array.isArray(resultado.body)).toBeTruthy();
@@ -53,7 +55,6 @@ describe('Testando rotas do accounts', () => {
         expect(resultado.body.id).toBeTruthy();
     })
 
-
     it('POST /accounts/ - Deve retornar statusCode 422', async () => {
         const payload = {
             street: 'Rua dos Tupis',
@@ -70,19 +71,23 @@ describe('Testando rotas do accounts', () => {
 
     it('PATCH /accounts/:id - Deve retornar statusCode 200', async () => {
         const payload = {
-            name: 'Daniel Castro'
-        }
-
+            "name": "Leonardo prado",
+  "password": "123456",
+  "status": 100,
+	"domain": "domain.com"
+          }
+    
         const resultado = await request(app)
-        .patch('/accounts/' + testId)
-        .send(payload)
-        .set('x-access-token', jwt);
-
+            .patch('/accounts/' + testId)
+            .send(payload)
+            .set('x-access-token', jwt);
+    
         expect(resultado.status).toEqual(200);
         expect(resultado.body.id).toEqual(testId);
         expect(resultado.body.name).toEqual(payload.name);
-    })
+      })
 
+      
     it('PATCH /accounts/:id - Deve retornar statusCode 400', async () => {
         const payload = {
             name: 'Daniel Castro'
@@ -96,7 +101,8 @@ describe('Testando rotas do accounts', () => {
         expect(resultado.status).toEqual(400);
     })
 
-it('PATCH /accounts/:id - Deve retornar statusCode 404', async () => {
+    
+it('PATCH /accounts/:id - Deve retornar statusCode 403', async () => {
         const payload = {
             name: 'Daniel Castro'
         }
@@ -106,9 +112,10 @@ it('PATCH /accounts/:id - Deve retornar statusCode 404', async () => {
         .send(payload)
         .set('x-access-token', jwt);
 
-        expect(resultado.status).toEqual(404);
+        expect(resultado.status).toEqual(403);
     })
-
+ 
+    
     it('GET /accounts/:id - Deve retornar statusCode 200', async () => {
         const resultado = await request(app)
         .get('/accounts/' + testId)
@@ -118,12 +125,12 @@ it('PATCH /accounts/:id - Deve retornar statusCode 404', async () => {
         expect(resultado.body.id).toBe(testId);
     })
 
-    it('GET /accounts/:id - Deve retornar statusCode 404', async () => {
+    it('GET /accounts/:id - Deve retornar statusCode 403', async () => {
         const resultado = await request(app)
         .get('/accounts/-1')
         .set('x-access-token', jwt);
 
-        expect(resultado.status).toEqual(404);
+        expect(resultado.status).toEqual(403);
     })
 
     it('GET /accounts/:id - Deve retornar statusCode 400', async () => {
@@ -133,4 +140,5 @@ it('PATCH /accounts/:id - Deve retornar statusCode 404', async () => {
 
         expect(resultado.status).toEqual(400);
     })
+
 }) 
